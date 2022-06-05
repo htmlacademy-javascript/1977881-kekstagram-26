@@ -9,4 +9,4 @@ getRandomPositiveInteger(3,5);
 function checkStringLength (string, length) {
   return string.length <= length;
 }
-checkStringLength(22222222222);
+checkStringLength(2,16);
