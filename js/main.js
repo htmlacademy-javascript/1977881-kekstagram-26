@@ -76,5 +76,5 @@ const createFotosObjects = (i)=>({
 });
 
 const similarObjects = Array.from({length: MAX_COUNT }, (v,i)=>createFotosObjects(i+1));
-console.log(similarObjects);
+
 
