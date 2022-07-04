@@ -1,6 +1,10 @@
 import {getRandomPositiveInteger} from './utils.js';
 import {getRandomArrayElement} from './utils.js';
 
+const MAX_COUNT = 25;
+const minRandomIntegerlikes = 15;
+const maxRandomIntegerlikes = 200;
+
 const DESCRIPTIONS = [
   'мой мир',
   'мой дом',
@@ -27,23 +31,25 @@ const NAMES = [
   'Ангелина'
 ];
 
+
 const idComments = (() => {
   const result = [];
-  for(let i = 0; i <= 100; i++){
+  const maxIdComment = 100;
+  for(let i = 0; i <= maxIdComment; i++){
     result[i] = i;
   }
   return result;
 
 })();
 
-const MAX_COUNT = 25;
-
 const createUsersComments = (numberOfComments) => {
   const comments = [];
   for(let i = 0; i < numberOfComments; i++){
+    const minRandomPositiveInteger = 1;
+    const maxRandomPositiveInteger = 6;
     comments[i] = {
       idComment: getRandomArrayElement(idComments, true),
-      avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
+      avatar: `img/avatar-${getRandomPositiveInteger(minRandomPositiveInteger, maxRandomPositiveInteger)}.svg`,
       message: getRandomArrayElement(MESSAGES),
       name: getRandomArrayElement(NAMES),
     };
@@ -51,11 +57,12 @@ const createUsersComments = (numberOfComments) => {
   return comments;
 };
 
+
 const createFotosObjects = (i)=>({
   id: i,
   url: `photos/${i}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomPositiveInteger(15, 200),
+  likes: getRandomPositiveInteger(minRandomIntegerlikes, maxRandomIntegerlikes),
   сomment: createUsersComments(getRandomPositiveInteger(1, idComments.length < 5? idComments.lenght:5))
 });
 

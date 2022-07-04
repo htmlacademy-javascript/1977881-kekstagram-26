@@ -16,5 +16,4 @@ const getRandomArrayElement = (elements, shouldBeRemoved = false) => {
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 };
 
-export {getRandomPositiveInteger};
-export {getRandomArrayElement};
+export {getRandomPositiveInteger, getRandomArrayElement};
