@@ -1,6 +1,4 @@
 import './data.js';
 import './utils.js';
-import {similarObjects} from './data.js';
-similarObjects();
-
-
+import './miniatures.js';
+import './big_pictures.js';

@@ -1,6 +1,14 @@
 import {getRandomPositiveInteger} from './utils.js';
 import {getRandomArrayElement} from './utils.js';
 
+const MAX_COUNT = 25;
+const MIN_ID_AVATAR = 1;
+const MAX_ID_AVATAR = 6;
+const MIN_NUMBER_LIKES = 15;
+const MAX_NUMBER_LIKES = 200;
+const MIN_COMMENT = 1;
+const MAX_COMMENT = 5;
+
 const DESCRIPTIONS = [
   'мой мир',
   'мой дом',
@@ -36,14 +44,13 @@ const idComments = (() => {
 
 })();
 
-const MAX_COUNT = 25;
 
 const createUsersComments = (numberOfComments) => {
   const comments = [];
   for(let i = 0; i < numberOfComments; i++){
     comments[i] = {
       idComment: getRandomArrayElement(idComments, true),
-      avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
+      avatar: `img/avatar-${getRandomPositiveInteger(MIN_ID_AVATAR, MAX_ID_AVATAR)}.svg`,
       message: getRandomArrayElement(MESSAGES),
       name: getRandomArrayElement(NAMES),
     };
@@ -55,10 +62,10 @@ const createFotosObjects = (i)=>({
   id: i,
   url: `photos/${i}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomPositiveInteger(15, 200),
-  сomment: createUsersComments(getRandomPositiveInteger(1, idComments.length < 5? idComments.lenght:5))
+  likes: getRandomPositiveInteger(MIN_NUMBER_LIKES, MAX_NUMBER_LIKES),
+  сomment: createUsersComments(getRandomPositiveInteger(MIN_COMMENT, MAX_COMMENT))
 });
 
-const similarObjects = Array.from({length: MAX_COUNT }, (v,i)=>createFotosObjects(i+1));
+const similarObjects = () => Array.from({length: MAX_COUNT},(v,i)=> createFotosObjects(i+1));
 
 export {similarObjects};
