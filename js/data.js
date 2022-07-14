@@ -8,6 +8,8 @@ const MIN_NUMBER_LIKES = 15;
 const MAX_NUMBER_LIKES = 200;
 const MIN_COMMENT = 1;
 const MAX_COMMENT = 5;
+const AVATAR_WEIGHT = 35;
+const AVATAR_HEIGHT = 35;
 
 const DESCRIPTIONS = [
   'мой мир',
@@ -68,4 +70,4 @@ const createFotosObjects = (i)=>({
 
 const similarObjects = () => Array.from({length: MAX_COUNT},(v,i)=> createFotosObjects(i+1));
 
-export {similarObjects};
+export {similarObjects, AVATAR_WEIGHT, AVATAR_HEIGHT};
