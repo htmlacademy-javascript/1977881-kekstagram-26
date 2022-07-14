@@ -1,7 +1,7 @@
 //import {BIG_PICTURE} from './open_close_big_pictures.js';
 import {AVATAR_WEIGHT, AVATAR_HEIGHT} from './data.js';
 import {similarObjects} from './data.js';
-import {renderPhotos} from './miniatures.js';
+/*import {renderPhotos} from './miniatures.js';*/
 
 const bigPicturesImg = document.querySelector('.big-picture__img');
 const likesCount = document.querySelector('.likes-count');
