@@ -9,6 +9,7 @@ const MAX_NUMBER_LIKES = 200;
 const MIN_COMMENT = 1;
 const MAX_COMMENT = 5;
 
+
 const DESCRIPTIONS = [
   'мой мир',
   'мой дом',
