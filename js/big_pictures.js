@@ -1,44 +1,84 @@
-//import {BIG_PICTURE} from './open_close_big_pictures.js';
-import {AVATAR_WEIGHT, AVATAR_HEIGHT} from './data.js';
-import {similarObjects} from './data.js';
-/*import {renderPhotos} from './miniatures.js';*/
-
-const bigPicturesImg = document.querySelector('.big-picture__img');
-const likesCount = document.querySelector('.likes-count');
-const commentCount= document.querySelector('.comments-count');
-const sosialCaption = document.querySelector('.social__caption');
+import {isEscapeKey} from './utils.js';
+const AVATAR_WEIGHT = 35;
+const AVATAR_HEIGHT = 35;
 
 
-const similarObject = similarObjects();
-const commentConection = ()=> {
+const bigPictureElement = document.querySelector('.big-picture__img');
+const bigPictureImgElement= bigPictureElement.querySelector('img');
+const likesCountElement = document.querySelector('.likes-count');
+const commentCountElement= document.querySelector('.comments-count');
+const sosialCaptionElement = document.querySelector('.social__caption');
+const picturesCloseElement = document.querySelector('#picture-cancel');
+const pictureElement = document.querySelector('.big-picture');
+const bodyElement = document.querySelector('body');
+const cocialCommentCountElement = document.querySelector('.social__comment-count');
+const commentsLoaderElement = document.querySelector('.comments-loader');
+const socialCommentsElement = document.querySelector('.social__comments');
+
+
+const createCommentElement = (comment)=> {
   const socialComments = document.createElement('li');
   socialComments.classList.add('social__comment');
 
   const elementImg = document.createElement('img');
   elementImg.classList.add('social__picture');
-  elementImg.src = similarObject.url;
-  elementImg.alt = similarObject.alt;
+  elementImg.src = comment.avatar;
+  elementImg.alt = comment.alt;
   elementImg.width = AVATAR_WEIGHT;
   elementImg.height = AVATAR_HEIGHT;
 
   const elementP = document.createElement('p');
   elementP.classList.add('social__text');
+  elementP.textContent = comment.message;
 
   socialComments.appendChild(elementImg);
-
   socialComments.appendChild(elementP);
   return socialComments;
 };
 
-/*const photo = renderPhotos();*/
-const renderBigPhotos = (photo) => {
-  bigPicturesImg.src = photo.url;
-  likesCount.textContent = photo.lenght;
-  commentCount.textContent = photo.lenght;
-  //socialComments = commentConection();
-  sosialCaption.textContent = photo.description;
-};
-//console.log(commentConection());
-//console.log(renderBigPhotos());
 
-export {renderBigPhotos, commentConection};
+const renderBigPhotos = (url, likes, сomments, description) => {
+  bigPictureImgElement.src = url;
+  likesCountElement.textContent = likes.lenght;
+  commentCountElement.textContent = сomments.lenght;
+  sosialCaptionElement.textContent = description;
+  socialCommentsElement.innerHTML = '';
+  сomments.forEach((element) => {
+    const newCommentELement = createCommentElement(element);
+    socialCommentsElement.appendChild(newCommentELement);
+  });
+
+  openUserModal();
+};
+
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeUserModal();
+
+  }
+};
+function openUserModal () {
+  pictureElement.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
+  document.addEventListener('keydown', onPopupEscKeydown);
+  cocialCommentCountElement.classList.add('hidden');
+  commentsLoaderElement.classList.add('hidden');
+}
+
+
+function closeUserModal () {
+  pictureElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
+  cocialCommentCountElement.classList.remove('hidden');
+  commentsLoaderElement.classList.remove('hidden');
+
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+}
+
+picturesCloseElement.addEventListener('click', () => {
+  closeUserModal();
+});
+
+export {renderBigPhotos};
