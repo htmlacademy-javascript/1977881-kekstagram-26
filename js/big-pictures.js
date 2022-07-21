@@ -39,17 +39,21 @@ const createCommentElement = (comment)=> {
 
 const renderBigPhotos = (url, likes, сomments, description) => {
   bigPictureImgElement.src = url;
-  likesCountElement.textContent = likes.lenght;
-  commentCountElement.textContent = сomments.lenght;
+  likesCountElement.textContent = likes.length;
+  commentCountElement.textContent = сomments.length;
   sosialCaptionElement.textContent = description;
-  socialCommentsElement.innerHTML = '';
+  socialCommentsElement.textContent = '';
   сomments.forEach((element) => {
     const newCommentELement = createCommentElement(element);
+
     socialCommentsElement.appendChild(newCommentELement);
+
   });
+
 
   openUserModal();
 };
+
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -77,8 +81,9 @@ function closeUserModal () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-picturesCloseElement.addEventListener('click', () => {
+const picturesClose = () => {picturesCloseElement.addEventListener('click', () => {
   closeUserModal();
-});
+});};
 
-export {renderBigPhotos};
+picturesClose();
+export {renderBigPhotos, bodyElement};
