@@ -6,8 +6,8 @@ const MIN_ID_AVATAR = 1;
 const MAX_ID_AVATAR = 6;
 const MIN_NUMBER_LIKES = 15;
 const MAX_NUMBER_LIKES = 200;
-const MIN_COMMENT = 1;
-const MAX_COMMENT = 16;
+const MIN_COMMENT = 5;
+const MAX_COMMENT = 20;
 
 
 const DESCRIPTIONS = [
