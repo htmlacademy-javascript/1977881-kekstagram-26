@@ -1,5 +1,6 @@
 import { bodyElement } from './big-pictures.js';
 import {isEscapeKey} from './utils.js';
+import {onResizeButtonClick, onCloseButtonClick} from './zoom-foto-effects.js';
 
 const DEFAULT_IMAGE = 'img/upload-default-image.jpg';
 const hashtagsRe = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
@@ -42,6 +43,7 @@ downloadInputElement.addEventListener('change', () => {
   imgLoadOverlayElement.classList.remove('hidden');
   bodyElement.classList.add('.modal-open');
   document.addEventListener('keydown', onUpLoadOverlayEscKeydown);
+  onResizeButtonClick();
 });
 
 
@@ -56,6 +58,7 @@ function closeUpLoadOverlay() {
 
 imgUpLoadCancelBtnElement.addEventListener('click', () => {
   closeUpLoadOverlay();
+  onCloseButtonClick();
 });
 
 
@@ -99,3 +102,5 @@ imgloadFormElement.addEventListener('submit', (evt) => {
     imgloadFormElement.submit();
   }
 });
+
+export {downloadInputElement, imgloadFormElement};
