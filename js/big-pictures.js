@@ -1,4 +1,5 @@
 import {isEscapeKey} from './utils.js';
+
 const AVATAR_WEIGHT = 35;
 const AVATAR_HEIGHT = 35;
 const COMMENT_BLOCK_SHOW = 5;
@@ -103,7 +104,6 @@ function openUserModal (totalComments) {
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onPopupEscKeydown);
 
-
   commentsLoaderElement.addEventListener('click', handleCommentsLoaderElementCLick);
   showLoadButton(totalComments);
   updateCommentСounter(totalCommentCount);
@@ -111,12 +111,13 @@ function openUserModal (totalComments) {
 
 const picturesClose = () => {picturesCloseElement.addEventListener('click', () => {
   closeUserModal();
+
 });};
 
 function closeUserModal () {
   pictureElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
-  //cocialCommentCountElement.classList.remove('hidden');
+
   commentsLoaderElement.classList.remove('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   commentsLoaderElement.removeEventListener('click',handleCommentsLoaderElementCLick);
