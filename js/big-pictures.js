@@ -124,4 +124,5 @@ function closeUserModal () {
 }
 
 picturesClose();
+
 export {renderBigPhotos, bodyElement};
