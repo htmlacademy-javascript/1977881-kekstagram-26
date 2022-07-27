@@ -1,12 +1,12 @@
-import { bodyElement } from './big-pictures.js';
-import {isEscapeKey} from './utils.js';
-import {onResizeButtonClick, onCloseButtonClick} from './zoom-foto-effects.js';
+import { isEscapeKey} from './utils.js';
+import {onCloseButtonClick} from './zoom-foto-effects.js';
 
 const DEFAULT_IMAGE = 'img/upload-default-image.jpg';
 const hashtagsRe = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const MAX_LENGTH_COMMENT = 140;
 const MIN_HASHTAGS_COUNT = 1;
 const MAX_HASHTAGS_COUNT = 5;
+
 
 const imgLoadOverlayElement= document.querySelector('.img-upload__overlay');
 const imgloadFormElement = document.querySelector('.img-upload__form');
@@ -15,6 +15,7 @@ const hashtagsElement = imgloadFormElement.querySelector('.text__hashtags');
 const descriptionElement = imgloadFormElement.querySelector('.text__description');
 const imgUpLoadPreviewElement = imgLoadOverlayElement.querySelector('.img-upload__preview img');
 const imgUpLoadCancelBtnElement = imgLoadOverlayElement.querySelector('#upload-cancel');
+const bodyElement = document.querySelector('body');
 
 const pristine = new Pristine(imgloadFormElement, {
   classTo: 'img-upload__field-wrapper',
@@ -37,13 +38,11 @@ const onUpLoadOverlayEscKeydown = (evt) => {
   }
 };
 
-
 downloadInputElement.addEventListener('change', () => {
 
   imgLoadOverlayElement.classList.remove('hidden');
   bodyElement.classList.add('.modal-open');
   document.addEventListener('keydown', onUpLoadOverlayEscKeydown);
-  onResizeButtonClick();
 });
 
 
@@ -61,9 +60,7 @@ imgUpLoadCancelBtnElement.addEventListener('click', () => {
   onCloseButtonClick();
 });
 
-
 const checkLengthComment = (comment) => comment.length <= MAX_LENGTH_COMMENT;
-
 
 const getHashtags = (value) => {
   const hashtags =  value.toLowerCase().split(' ');
@@ -72,9 +69,20 @@ const getHashtags = (value) => {
 
 const validateHashtags = (value) => {
   const hashtags = getHashtags(value);
-
-
   return value === ''|| hashtags.every((hashtag) => hashtagsRe.test(hashtag));
+};
+
+const uploadPicture = (body) => {
+  fetch('https://26.javascript.pages.academy/kekstagram/data',
+    {
+      method: 'POST',
+      body,
+    },
+  ).then(() => {
+
+  }).catch(() => {
+
+  });
 };
 
 const validateUniqueHashtags = (value) => {
@@ -99,7 +107,7 @@ imgloadFormElement.addEventListener('submit', (evt) => {
 
   const isValid = pristine.validate();
   if (isValid) {
-    imgloadFormElement.submit();
+    uploadPicture(new FormData(evt.target));
   }
 });
 

@@ -1407,3 +1407,12 @@ main {
 .hidden {
   display: none;
 }
+
+.notification{
+
+}
+
+.notification_message{
+  text-align: center;
+  padding-top: 25px;
+}
