@@ -1,6 +1,8 @@
 import { bodyElement } from './big-pictures.js';
 import {isEscapeKey} from './utils.js';
 import {onResizeButtonClick, onCloseButtonClick} from './zoom-foto-effects.js';
+import {showApprove, showError} from './message.js';
+
 
 const DEFAULT_IMAGE = 'img/upload-default-image.jpg';
 const hashtagsRe = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
@@ -99,8 +101,9 @@ imgloadFormElement.addEventListener('submit', (evt) => {
 
   const isValid = pristine.validate();
   if (isValid) {
+    showApprove();
     imgloadFormElement.submit();
-  }
+  } else {showError();}
 });
 
 export {downloadInputElement, imgloadFormElement};
