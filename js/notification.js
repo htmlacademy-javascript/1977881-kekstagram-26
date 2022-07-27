@@ -1,14 +1,14 @@
-const notificationElement = document.querySelector('.notification');
-const notificationMessageElement = document.querySelector('.notification_message');
+const motificationElement = document.querySelector('.notification');
+const motificationMessageElement = document.querySelector('.notification_message');
 
 const showNotification = (message)=>{
-  notificationElement.classList.remove('hidden');
-  notificationMessageElement.textContent = message;
+  motificationElement.classList.remove('hidden');
+  motificationMessageElement.innerHTML = message
 };
 
 const hideNotification = ()=>{
-  notificationMessageElement.innerHTML = '';
-  notificationElement.classList.add('hidden');
+  motificationMessageElement.innerHTML = '';
+  motificationElement.classList.add('hidden');
 };
 
 export {showNotification, hideNotification};

@@ -7,10 +7,10 @@ const picturesContainerElement = document.querySelector('.pictures');
 
 const picturesFragment = document.createDocumentFragment();
 
-//const imgFiltersElement = document.querySelector('.img-filters');
-//const btnFilterDefaultElement = document.getElementById('filter-default');
-//const btnFilterRandomsElement = document.getElementById('filter-random');
-//const btnFilterDiscussedElement = document.getElementById('filter-discussed');
+const imgFiltersElement = document.querySelector('.img-filters');
+const btnFilterDefaultElement = document.getElementById('filter-default');
+const btnFilterRandomsElement = document.getElementById('filter-random');
+const btnFilterDiscussedElement = document.getElementById('filter-discussed');
 
 const renderPhotos = (similarMiniatures) => {
   picturesContainerElement.querySelectorAll('.picture').forEach((element)=>picturesContainerElement.removeChild(element));
@@ -29,42 +29,46 @@ const renderPhotos = (similarMiniatures) => {
 
     picturesFragment.appendChild(pictureElement);
   });
-
   picturesContainerElement.appendChild(picturesFragment);
 };
 
-/*const showImgFilters = ()=>{
-  imgFiltersElement.classList.remove('img-filters--inactive');
-};*/
-
+const showPictures=()=>
+{
+  initEvents();
+  loadPictures();
+}
 
 const loadPictures = (filter)=>{
-  fetch('https://26.javascript.pages.academy/kekstagram/data')
-    .then((response) =>
-      response.json()
-    ).then((data) => {
 
-      if( filter){
-        data = filter(data);
+  fetch('https://26.javascript.pages.academy/kekstagram/data')
+  .then((response) => {
+    return response.json();
+  }).then((data) => {
+
+      if(filter!=null){
+        data = filter(data)
       }
+
       renderPhotos(data);
-      //showImgFilters();
+      showImgFilters();
       hideNotification();
-    })
-    .catch(() => {
-      showNotification('ERROR OCCURRED WHILE LOADING PICTURES');
-    });
+  })
+      .catch(error => {
+          showNotification('ERROR OCCURRED WHILE LOADING PICTURES');
+          console.error(error);
+      });
 };
 
-const randomFilter = (pictures)=>
-  Array.from({length: 10},()=> getRandomArrayElement(pictures));
+const randomFilter = (pictures)=>{
+ return Array.from({length: 10},(v,i)=> getRandomArrayElement(pictures));
+}
 
-/*const discussedFilter = (pictures)=>{
-  const sortablePictures = pictures.sort(commentCompare);
-  return sortablePictures;
-};*/
+const discussedFilter = (pictures)=>{
+   var sortablePictures = pictures.sort(commentCompare);
+   return sortablePictures;
+ }
 
-function commentCompare(a, b) {
+ function commentCompare(a, b) {
   if (a.comments.length< b.comments.length) {
     return 1;
   }
@@ -75,44 +79,41 @@ function commentCompare(a, b) {
   return 0;
 }
 
-/*const resetFilter= (element, active)=>{
+const initEvents=()=>{
+  btnFilterDefaultElement.addEventListener('click', ()=> updateFilterStates(true, false, false));
+  btnFilterDefaultElement.addEventListener('click', debounce(() =>{ loadPictures()}));
+
+  btnFilterRandomsElement.addEventListener('click', () => updateFilterStates(false, true, false));
+  btnFilterRandomsElement.addEventListener('click', debounce(() =>{ loadPictures(randomFilter)}))
+
+  btnFilterDiscussedElement.addEventListener('click', () => updateFilterStates(false, false, true));
+  btnFilterDiscussedElement.addEventListener('click', debounce(() =>{ loadPictures(discussedFilter)}))
+}
+
+const showImgFilters = ()=>{
+  imgFiltersElement.classList.remove('img-filters--inactive');
+}
+
+const updateFilterStates =(bydefault,random, discussed)=>{
+  resetFilter(btnFilterDefaultElement, bydefault);
+  resetFilter(btnFilterRandomsElement, random);
+  resetFilter(btnFilterDiscussedElement, discussed);
+}
+
+const resetFilter= (element, active)=>{
   if(active){
     element.classList.add('img-filters__button--active');
   }else{
     element.classList.remove('img-filters__button--active');
   }
-};
-*/
-/*const updateFilterStates =(bydefault,random, discussed)=>{
-  resetFilter(btnFilterDefaultElement, bydefault);
-  resetFilter(btnFilterRandomsElement, random);
-  resetFilter(btnFilterDiscussedElement, discussed);
-};*/
+}
 
-/*const initEvents=()=>{
-  btnFilterDefaultElement.addEventListener('click', ()=> updateFilterStates(true, false, false));
-  btnFilterDefaultElement.addEventListener('click', debounce(() =>{ loadPictures();}));
-
-  btnFilterRandomsElement.addEventListener('click', () => updateFilterStates(false, true, false));
-  btnFilterRandomsElement.addEventListener('click', debounce(() =>{ loadPictures(randomFilter);}));
-
-  btnFilterDiscussedElement.addEventListener('click', () => updateFilterStates(false, false, true));
-  btnFilterDiscussedElement.addEventListener('click', debounce(() =>{ loadPictures(discussedFilter);}));
-};*/
-
-const showPictures=()=>
-{
-// initEvents();
-  loadPictures();
-};
-
-
-/*function debounce(func, timeout = 300){
+function debounce(func, timeout = 300){
   let timer;
   return (...args) => {
     clearTimeout(timer);
     timer = setTimeout(() => { func.apply(this, args); }, timeout);
   };
-}*/
+}
 
 export {showPictures};

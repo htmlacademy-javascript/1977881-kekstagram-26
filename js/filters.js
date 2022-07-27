@@ -1,10 +1,9 @@
-import {imgUpLoadElement} from './zoom-foto-effects.js';
+import {applyFilters} from './zoom-foto-effects.js';
 
 const sliderForm = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
 const changePhotoFilterForm = document.querySelector('.img-upload__effects');
-
 
 const effectSettings = {
   chrome:{
@@ -74,30 +73,20 @@ noUiSlider.create(sliderElement, {
     min: 0,
     max: 1,
   },
-  start: 0.5,
   step: 0.1,
   connect: 'lower',
-  format: {
-    to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(1);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
-  },
+  start: 1,
 });
 
 sliderElement.noUiSlider.on('update', () => {
+  sliderForm.classList.remove('hidden');
   const value = sliderElement.noUiSlider.get();
   valueElement.setAttribute('value', value);
   const selectedFilter = changePhotoFilterForm.querySelector('.effects__radio:checked').value;
 
   const settings = effectSettings[selectedFilter];
   if(settings) {
-    imgUpLoadElement.style.filter = `${settings.filter}(${value}${settings.units})`;
+    applyFilters(`${settings.filter}(${value}${settings.units})`);
   }
 });
 
@@ -108,8 +97,7 @@ const onChangeFilter = (evt) => {
     sliderElement.noUiSlider.updateOptions(effectSettings[evt.target.value].slider);
     return;
   }
-  imgUpLoadElement.style.filter = '';
-  sliderForm.classList.add('hidden');
+  applyFilters('');
 };
 
 const changePhotoFilter = () => {
