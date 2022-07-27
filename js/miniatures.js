@@ -32,43 +32,15 @@ const renderPhotos = (similarMiniatures) => {
   picturesContainerElement.appendChild(picturesFragment);
 };
 
-const showPictures=()=>
-{
-  initEvents();
-  loadPictures();
-}
-
-const loadPictures = (filter)=>{
-
-  fetch('https://26.javascript.pages.academy/kekstagram/data')
-  .then((response) => {
-    return response.json();
-  }).then((data) => {
-
-      if(filter!=null){
-        data = filter(data)
-      }
-
-      renderPhotos(data);
-      showImgFilters();
-      hideNotification();
-  })
-      .catch(error => {
-          showNotification('ERROR OCCURRED WHILE LOADING PICTURES');
-          console.error(error);
-      });
+const randomFilter = (pictures)=>{
+  Array.from({length: 10},()=> getRandomArrayElement(pictures));
 };
 
-const randomFilter = (pictures)=>{
- return Array.from({length: 10},(v,i)=> getRandomArrayElement(pictures));
-}
-
 const discussedFilter = (pictures)=>{
-   var sortablePictures = pictures.sort(commentCompare);
-   return sortablePictures;
- }
+  pictures.sort(commentCompare);
+};
 
- function commentCompare(a, b) {
+function commentCompare(a, b) {
   if (a.comments.length< b.comments.length) {
     return 1;
   }
@@ -79,26 +51,9 @@ const discussedFilter = (pictures)=>{
   return 0;
 }
 
-const initEvents=()=>{
-  btnFilterDefaultElement.addEventListener('click', ()=> updateFilterStates(true, false, false));
-  btnFilterDefaultElement.addEventListener('click', debounce(() =>{ loadPictures()}));
-
-  btnFilterRandomsElement.addEventListener('click', () => updateFilterStates(false, true, false));
-  btnFilterRandomsElement.addEventListener('click', debounce(() =>{ loadPictures(randomFilter)}))
-
-  btnFilterDiscussedElement.addEventListener('click', () => updateFilterStates(false, false, true));
-  btnFilterDiscussedElement.addEventListener('click', debounce(() =>{ loadPictures(discussedFilter)}))
-}
-
 const showImgFilters = ()=>{
   imgFiltersElement.classList.remove('img-filters--inactive');
-}
-
-const updateFilterStates =(bydefault,random, discussed)=>{
-  resetFilter(btnFilterDefaultElement, bydefault);
-  resetFilter(btnFilterRandomsElement, random);
-  resetFilter(btnFilterDiscussedElement, discussed);
-}
+};
 
 const resetFilter= (element, active)=>{
   if(active){
@@ -106,7 +61,13 @@ const resetFilter= (element, active)=>{
   }else{
     element.classList.remove('img-filters__button--active');
   }
-}
+};
+
+const updateFilterStates =(bydefault,random, discussed)=>{
+  resetFilter(btnFilterDefaultElement, bydefault);
+  resetFilter(btnFilterRandomsElement, random);
+  resetFilter(btnFilterDiscussedElement, discussed);
+};
 
 function debounce(func, timeout = 300){
   let timer;
@@ -115,5 +76,38 @@ function debounce(func, timeout = 300){
     timer = setTimeout(() => { func.apply(this, args); }, timeout);
   };
 }
+
+const loadPictures = (filter)=>{
+  fetch('https://26.javascript.pages.academy/kekstagram/data')
+    .then((response) => { response.json();}).then((data) => {
+
+      if(filter){
+        data = filter(data);
+      }
+      renderPhotos(data);
+      showImgFilters();
+      hideNotification();
+    })
+    .catch(() => {
+      showNotification('ERROR OCCURRED WHILE LOADING PICTURES');
+    });
+};
+
+const initEvents=()=>{
+  btnFilterDefaultElement.addEventListener('click', ()=> updateFilterStates(true, false, false));
+  btnFilterDefaultElement.addEventListener('click', debounce(() => loadPictures()));
+
+  btnFilterRandomsElement.addEventListener('click', () => updateFilterStates(false, true, false));
+  btnFilterRandomsElement.addEventListener('click', debounce(() => loadPictures(randomFilter)));
+
+  btnFilterDiscussedElement.addEventListener('click', () => updateFilterStates(false, false, true));
+  btnFilterDiscussedElement.addEventListener('click', debounce(() => loadPictures(discussedFilter)));
+};
+
+const showPictures=()=>
+{
+  initEvents();
+  loadPictures();
+};
 
 export {showPictures};
