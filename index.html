@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="nouislider/nouislider.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кекстаграм</title>
@@ -32,7 +33,7 @@
           <h2 class="img-upload__title  visually-hidden">Загрузка фотографии</h2>
           <form class="img-upload__form" id="upload-select-image" method="post" action="https://26.javascript.pages.academy/kekstagram" enctype="multipart/form-data" autocomplete="off">
 
-            <!-- Изначальное состояние поля для загрузки изображения -->
+            <!-- Изначальноimg-upload__inputе состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
               <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required>
               <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
@@ -116,7 +117,7 @@
                 <!-- Добавление хэш-тегов и комментария к изображению -->
                 <fieldset class="img-upload__text text">
                   <div class="img-upload__field-wrapper">
-                    <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег" minlength="2" maxlength="20">
+                    <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
                   </div>
                   <div class="img-upload__field-wrapper">
                     <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
@@ -167,7 +168,7 @@
           </ul>
 
           <!-- Кнопка для загрузки новой порции комментариев -->
-          <button type="button" class="social__comments-loader  comments-loader">Загрузить еще</button>
+          <button type="button" class="social__comments-loader  comments-loader">Загрузить</button>
 
           <!-- Форма для отправки комментария -->
           <div class="social__footer">
@@ -214,7 +215,7 @@
     <section class="error">
       <div class="error__inner">
         <h2 class="error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="error__button">Загрузить другой файл</button>
+        <button type="button" class="error__button">Продолжить редактировать</button>
       </div>
     </section>
   </template>
@@ -233,8 +234,9 @@
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
+  <script src="./nouislider/nouislider.js"></script>
   <script src="pristine/pristine.min.js"></script>
 <script src="./js/main.js" type="module"></script>
-<script src="nouislider/nouislider.js"></script>
+
 </body>
 </html>
