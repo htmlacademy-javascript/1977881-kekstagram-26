@@ -11,7 +11,7 @@ const imgUpLoadElement = imgBackgroundElement.querySelector('.img-upload__img');
 
 function setImageScale(){
   scaleControlValueElement.value = `${value}%`;
-  imgUpLoadElement.style.transform = `scale(${value / 100})`;
+  imgUpLoadElement.style.transform = `scale(${value / MAX_VALUE})`;
 }
 
 const rescaleMore = ()=>{

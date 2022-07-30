@@ -3,6 +3,7 @@ import {isEscapeKey} from './utils.js';
 const AVATAR_WEIGHT = 35;
 const AVATAR_HEIGHT = 35;
 const COMMENT_BLOCK_SHOW = 5;
+const STEP_COMMENTS_COUNT = 5;
 
 const bigPictureElement = document.querySelector('.big-picture__img');
 const bigPictureImgElement = bigPictureElement.querySelector('img');
@@ -18,6 +19,12 @@ const socialCommentsElement = document.querySelector('.social__comments');
 
 
 let totalCommentCount = 0;
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImagePopup();
+  }
+};
 
 const createCommentElement = (comment, hidden)=> {
   const socialComments = document.createElement('li');
@@ -55,12 +62,6 @@ function updateCommentСounter(totalnumbercomments){
   const displaedCommentCount = totalnumbercomments - hiddenCommentCount.length;
   socialCommentCountElement.textContent = `${displaedCommentCount} из ${totalnumbercomments}`;
 }
-
-const reviewImage = (url, likes, comments, description) => {
-  renderImage(url, likes, comments, description);  
-  openImagePopup(comments.length - COMMENT_BLOCK_SHOW);
-};
-
 const renderImage = (url, likes, comments, description)=>{
   bigPictureImgElement.src = url;
   likesCountElement.textContent = likes.length;
@@ -70,12 +71,18 @@ const renderImage = (url, likes, comments, description)=>{
   totalCommentCount = comments.length;
 
   for(let i = 0; i<comments.length; i++){
-    const newCommentELement = createCommentElement(comments[i],i>=5);
+    const newCommentELement = createCommentElement(comments[i],i>=STEP_COMMENTS_COUNT);
     socialCommentsElement.appendChild(newCommentELement);
   }
-  showLoadCommentsButton(totalCommentCount - 5);
+  showLoadCommentsButton(totalCommentCount - STEP_COMMENTS_COUNT);
   updateCommentСounter(totalCommentCount);
-}
+};
+
+const reviewImage = (url, likes, comments, description) => {
+  renderImage(url, likes, comments, description);
+  openImagePopup(comments.length - COMMENT_BLOCK_SHOW);
+};
+
 
 function openImagePopup () {
   pictureElement.classList.remove('hidden');
@@ -111,11 +118,5 @@ function handleLoadCommentsButtonCLick(evt){
   updateCommentСounter(totalCommentCount);
 }
 
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeImagePopup();
-  }
-};
 
 export {reviewImage};

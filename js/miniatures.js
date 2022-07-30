@@ -10,6 +10,7 @@ const btnFilterDefaultElement = document.getElementById('filter-default');
 const btnFilterRandomsElement = document.getElementById('filter-random');
 const btnFilterDiscussedElement = document.getElementById('filter-discussed');
 const RANDOM_PICTURES_MAX_COUNT = 10;
+const DEBOUNCE_DELAY= 300;
 
 const renderPictures = (similarMiniatures) => {
   picturesContainerElement.querySelectorAll('.picture').forEach((element)=>picturesContainerElement.removeChild(element));
@@ -62,7 +63,6 @@ const updateFilterStates =(byDefault,random, discussed)=>{
   resetFilter(btnFilterRandomsElement, random);
   resetFilter(btnFilterDiscussedElement, discussed);
 };
-const DEBOUNCE_DELAY= 300;
 
 function debounce(func, timeout = DEBOUNCE_DELAY){
   let timer;

@@ -4,6 +4,8 @@ import {showApprove, showError} from './message.js';
 import {isValid, isEditMode} from './validation.js';
 import {onZoomEffects, offZoomEffects, resetFotoSizeToDefault } from './zoom-foto-effects.js';
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const imageUploadInputElement = document.querySelector('.img-upload__input');
 const downloadImagePopupElement = document.querySelector('.img-upload__overlay');
 const downloadImageCloseButtonElement =  document.querySelector('.img-upload__cancel');
@@ -14,7 +16,7 @@ const noEffectElement = document.querySelector('#effect-none');
 const imgloadFormElement = document.querySelector('.img-upload__form');
 const hashtagsElement = imgloadFormElement.querySelector('.text__hashtags');
 const descriptionElement = imgloadFormElement.querySelector('.text__description');
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
