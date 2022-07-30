@@ -10,11 +10,12 @@ const getRandomArrayElement = (elements, shouldBeRemoved = false) => {
   const index = getRandomPositiveInteger(0, elements.length - 1);
   const value = elements[index];
   if(shouldBeRemoved) {
-    delete elements[index];
+    elements = elements.splice(index,1);
     return value;
   }
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const ESCAPE_KEY_NAME = 'Escape';
+const isEscapeKey = (evt) => evt.key === ESCAPE_KEY_NAME;
 export {getRandomPositiveInteger, getRandomArrayElement, isEscapeKey};

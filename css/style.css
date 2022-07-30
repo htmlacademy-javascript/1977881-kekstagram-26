@@ -1416,3 +1416,8 @@ main {
   text-align: center;
   padding-top: 25px;
 }
+
+.pristine-error{
+  display: block;
+  color: #ed4949;
+}

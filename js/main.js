@@ -1,11 +1,11 @@
-import './utils.js';
-import './miniatures.js';
-import './big-pictures.js';
-import {showPictures} from './miniatures.js';
-import './validation-date.js';
-import {defaultPhoto} from './zoom-foto-effects.js';
-import {changePhotoFilter} from './filters.js';
+import {onUploadImage} from './upload-image.js';
+import {loadPictures, onMiniatures} from './miniatures.js';
+import {addSliderUpdater, initSlider} from './filters.js';
+import {onValidation} from './validation.js';
 
-showPictures();
-defaultPhoto();
-changePhotoFilter();
+initSlider();
+addSliderUpdater();
+onValidation();
+onUploadImage();
+onMiniatures();
+loadPictures();
