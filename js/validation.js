@@ -41,14 +41,16 @@ const validateHashtagsCount = (value) => {
 };
 
 const isEditMode = () => (document.activeElement === hashtagsElement || document.activeElement === descriptionElement);
-const isValid = () => pristine.validate();
+const validate = ()=>pristine.validate();
+const isValid = () => validate();
 
-function onValidation(){
+
+const initValidation = ()=>{
   pristine.addValidator(hashtagsElement, validateHashtags,
     `Хэш-тег должен начинаться с # и содержать хотя бы ${MIN_HASHTAGS_COUNT} символ (буквы и цифры), но не более ${MAX_HASHTAG_MAX_LENGTH} символов`);
   pristine.addValidator(hashtagsElement, validateUniqueHashtags, 'Хэш-теги не должны повторяться');
   pristine.addValidator(hashtagsElement, validateHashtagsCount, `Нельзя указать больше ${MAX_HASHTAGS_COUNT} хэш-тегов`);
   pristine.addValidator(descriptionElement, checkLengthComment, `Максимальное количество символов - ${MAX_LENGTH_COMMENT}`);
-}
+};
 
-export {isValid, isEditMode, onValidation};
+export {isValid, isEditMode, validate, initValidation};

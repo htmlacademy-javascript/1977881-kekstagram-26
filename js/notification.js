@@ -3,7 +3,7 @@ const motificationMessageElement = document.querySelector('.notification_message
 
 const showNotification = (message)=>{
   motificationElement.classList.remove('hidden');
-  motificationMessageElement.innerHTML = message;
+  motificationMessageElement.textContent = message;
 };
 
 const hideNotification = ()=>{

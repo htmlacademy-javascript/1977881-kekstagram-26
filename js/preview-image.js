@@ -4,6 +4,7 @@ const AVATAR_WEIGHT = 35;
 const AVATAR_HEIGHT = 35;
 const COMMENT_BLOCK_SHOW = 5;
 const STEP_COMMENTS_COUNT = 5;
+let totalCommentCount = 0;
 
 const bigPictureElement = document.querySelector('.big-picture__img');
 const bigPictureImgElement = bigPictureElement.querySelector('img');
@@ -16,15 +17,6 @@ const bodyElement = document.querySelector('body');
 const socialCommentCountElement = document.querySelector('.social__comment-count');
 const commentsLoaderElement = document.querySelector('.comments-loader');
 const socialCommentsElement = document.querySelector('.social__comments');
-
-
-let totalCommentCount = 0;
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeImagePopup();
-  }
-};
 
 const createCommentElement = (comment, hidden)=> {
   const socialComments = document.createElement('li');
@@ -57,11 +49,49 @@ const showLoadCommentsButton = (length)=>{
   else{commentsLoaderElement.classList.add('hidden');}
 };
 
-function updateCommentСounter(totalnumbercomments){
+const updateCommentСounter = (totalnumbercomments)=>{
   const hiddenCommentCount = document.querySelectorAll('.social__comment.hidden');
   const displaedCommentCount = totalnumbercomments - hiddenCommentCount.length;
   socialCommentCountElement.textContent = `${displaedCommentCount} из ${totalnumbercomments}`;
-}
+};
+
+const onLoadCommentsButtonCLick =(evt)=>{
+  evt.preventDefault();
+  const loadComments = document.querySelectorAll('.social__comment.hidden');
+
+  let lenght = 5;
+  if(loadComments.length < COMMENT_BLOCK_SHOW){
+    lenght = loadComments.length;
+  }
+
+  for(let j = 0; j<lenght; j++){
+    loadComments[j].classList.remove('hidden');
+  }
+
+  showLoadCommentsButton(loadComments.length - COMMENT_BLOCK_SHOW);
+  updateCommentСounter(totalCommentCount);
+};
+
+const closeImagePopup = () => {
+  pictureElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
+  commentsLoaderElement.classList.remove('hidden');
+  commentsLoaderElement.removeEventListener('click', onLoadCommentsButtonCLick);
+};
+
+const onCloseImagePopup = () => {
+  closeImagePopup();
+  document.removeEventListener('keydown', onCloseImagePopup);
+  picturesCloseElement.removeEventListener('click', onCloseImagePopup);
+};
+
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImagePopup();
+  }
+};
+
 const renderImage = (url, likes, comments, description)=>{
   bigPictureImgElement.src = url;
   likesCountElement.textContent = likes.length;
@@ -78,45 +108,17 @@ const renderImage = (url, likes, comments, description)=>{
   updateCommentСounter(totalCommentCount);
 };
 
+const openImagePopup = () => {
+  pictureElement.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
+  document.addEventListener('keydown', onPopupEscKeydown);
+  commentsLoaderElement.addEventListener('click', onLoadCommentsButtonCLick);
+  picturesCloseElement.addEventListener('click', onCloseImagePopup);
+};
+
 const reviewImage = (url, likes, comments, description) => {
   renderImage(url, likes, comments, description);
   openImagePopup(comments.length - COMMENT_BLOCK_SHOW);
 };
-
-
-function openImagePopup () {
-  pictureElement.classList.remove('hidden');
-  bodyElement.classList.add('modal-open');
-  document.addEventListener('keydown', onPopupEscKeydown);
-  commentsLoaderElement.addEventListener('click', handleLoadCommentsButtonCLick);
-  picturesCloseElement.addEventListener('click', () => {closeImagePopup();});
-}
-
-function closeImagePopup () {
-  pictureElement.classList.add('hidden');
-  bodyElement.classList.remove('modal-open');
-  commentsLoaderElement.classList.remove('hidden');
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  commentsLoaderElement.removeEventListener('click', handleLoadCommentsButtonCLick);
-  picturesCloseElement.removeEventListener('click', () => {closeImagePopup();});
-}
-
-function handleLoadCommentsButtonCLick(evt){
-  evt.preventDefault();
-  const loadComments = document.querySelectorAll('.social__comment.hidden');
-
-  let lenght = 5;
-  if(loadComments.length < COMMENT_BLOCK_SHOW){
-    lenght = loadComments.length;
-  }
-
-  for(let j = 0; j<lenght; j++){
-    loadComments[j].classList.remove('hidden');
-  }
-
-  showLoadCommentsButton(loadComments.length - COMMENT_BLOCK_SHOW);
-  updateCommentСounter(totalCommentCount);
-}
-
 
 export {reviewImage};
