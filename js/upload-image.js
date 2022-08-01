@@ -21,6 +21,41 @@ const newSuccessMessage = successTemplateElement.cloneNode(true);
 const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
 const newErrorMessage = errorTemplateElement.cloneNode(true);
 
+const closeUploadImagePopup = (resetState = true) => {
+  downloadImagePopupElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+
+  if(resetState){
+    noEffectElement.checked = true;
+    imageUploadInputElement.value = '';
+    hashtagsElement.value = '';
+    descriptionElement.value = '';
+    removeFilterEffects();
+  }
+
+  validate();
+
+  removeFillterEvents();
+  removeZoomEffectEvents();
+};
+
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    if(isEditMode()){
+      return;
+    }
+    closeUploadImagePopup();
+    document.removeEventListener('keydown', onPopupEscKeydown);
+  }
+};
+
+const onCloseUploadImagePopup= (resetState = true) => {
+
+  closeUploadImagePopup(resetState);
+  downloadImageCloseButtonElement.removeEventListener('click', onCloseUploadImagePopup);
+  document.removeEventListener('keydown', onPopupEscKeydown);
+};
 
 const onOpenUploadImagePopup = (resetState = true) => {
 
@@ -49,35 +84,48 @@ const onOpenUploadImagePopup = (resetState = true) => {
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
-const onPopupEscKeydown = (evt) => {
+const closeSuccessPopup = () => {
+  document.body.removeChild(newSuccessMessage);
+};
+
+const onCloseSuccessPopup = () => {
+  closeSuccessPopup();
+  document.removeEventListener('click', onCloseSuccessPopup);
+};
+
+const onSuccessEscapeKyedown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    if(isEditMode()){
-      return;
-    }
-    onCloseUploadImagePopup();
+    closeSuccessPopup();
+    document.removeEventListener('keydown', onSuccessEscapeKyedown);
   }
 };
 
+const closeErrorPopup = () => {
+  document.body.removeChild(newErrorMessage);
+  onOpenUploadImagePopup(false);
+};
 
-const onCloseUploadImagePopup= (resetState = true) => {
-  downloadImagePopupElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  downloadImageCloseButtonElement.removeEventListener('click', onCloseUploadImagePopup);
+const onCloseErrorPopup = () => {
+  closeErrorPopup();
+  document.removeEventListener('click', onCloseErrorPopup);
+};
 
-  if(resetState){
-    noEffectElement.checked = true;
-    imageUploadInputElement.value = '';
-    hashtagsElement.value = '';
-    descriptionElement.value = '';
-    removeFilterEffects();
+const onErrorEscapeKyedown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onCloseErrorPopup();
+    onOpenUploadImagePopup(false);
+    document.removeEventListener('keydown', onErrorEscapeKyedown);
   }
+};
 
-  validate();
-
-  removeFillterEvents();
-  removeZoomEffectEvents();
-  document.removeEventListener('keydown', onPopupEscKeydown);
+const showApprove = () =>  {
+  document.body.appendChild(newSuccessMessage);
+  const successButtonElement = document.querySelector('.success__button');
+  document.addEventListener('keydown', onSuccessEscapeKyedown);
+  successButtonElement.addEventListener('click', onCloseSuccessPopup);
+  document.addEventListener('click', onCloseSuccessPopup);
 };
 
 const showError = () => {
@@ -88,15 +136,6 @@ const showError = () => {
   errorButtonElement.addEventListener('click', onCloseErrorPopup);
 
   document.addEventListener('click', onCloseErrorPopup);
-};
-
-
-const showApprove = () =>  {
-  document.body.appendChild(newSuccessMessage);
-  const successButtonElement = document.querySelector('.success__button');
-  document.addEventListener('keydown', onSuccessEscapeKyedown);
-  successButtonElement.addEventListener('click', onCloseSuccessPopup);
-  document.addEventListener('click', onCloseSuccessPopup);
 };
 
 const uploadPicture = (body) => {
@@ -126,35 +165,6 @@ const onSubmitUploadForm = (evt) => {
     uploadPicture(new FormData(evt.target));
   }
 };
-
-const onCloseSuccessPopup = () => {
-  document.removeEventListener('keydown', onSuccessEscapeKyedown);
-  document.body.removeChild(newSuccessMessage);
-  document.removeEventListener('click', onCloseSuccessPopup);
-};
-const onSuccessEscapeKyedown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    onCloseSuccessPopup();
-  }
-};
-
-
-const onCloseErrorPopup = () => {
-  document.removeEventListener('keydown', onErrorEscapeKyedown);
-  document.body.removeChild(newErrorMessage);
-  document.removeEventListener('click', onCloseErrorPopup);
-  onOpenUploadImagePopup(false);
-};
-
-const onErrorEscapeKyedown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    onCloseErrorPopup();
-    onOpenUploadImagePopup(false);
-  }
-};
-
 
 const addUploadImageEvents = () =>{
   imageUploadInputElement.addEventListener('change', onOpenUploadImagePopup);

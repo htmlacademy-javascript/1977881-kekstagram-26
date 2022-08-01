@@ -18,23 +18,6 @@ const socialCommentCountElement = document.querySelector('.social__comment-count
 const commentsLoaderElement = document.querySelector('.comments-loader');
 const socialCommentsElement = document.querySelector('.social__comments');
 
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    onCloseImagePopup();
-  }
-};
-
-const onCloseImagePopup = () => {
-  pictureElement.classList.add('hidden');
-  bodyElement.classList.remove('modal-open');
-  commentsLoaderElement.classList.remove('hidden');
-  document.removeEventListener('keydown', onPopupEscKeydown);
-  commentsLoaderElement.removeEventListener('click', onLoadCommentsButtonCLick);
-  picturesCloseElement.removeEventListener('click', onCloseImagePopup);
-};
-
-
 const createCommentElement = (comment, hidden)=> {
   const socialComments = document.createElement('li');
   socialComments.classList.add('social__comment');
@@ -72,7 +55,6 @@ const updateCommentСounter = (totalnumbercomments)=>{
   socialCommentCountElement.textContent = `${displaedCommentCount} из ${totalnumbercomments}`;
 };
 
-
 const onLoadCommentsButtonCLick =(evt)=>{
   evt.preventDefault();
   const loadComments = document.querySelectorAll('.social__comment.hidden');
@@ -90,6 +72,25 @@ const onLoadCommentsButtonCLick =(evt)=>{
   updateCommentСounter(totalCommentCount);
 };
 
+const closeImagePopup = () => {
+  pictureElement.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
+  commentsLoaderElement.classList.remove('hidden');
+  commentsLoaderElement.removeEventListener('click', onLoadCommentsButtonCLick);
+};
+
+const onCloseImagePopup = () => {
+  closeImagePopup();
+  document.removeEventListener('keydown', onCloseImagePopup);
+  picturesCloseElement.removeEventListener('click', onCloseImagePopup);
+};
+
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeImagePopup();
+  }
+};
 
 const renderImage = (url, likes, comments, description)=>{
   bigPictureImgElement.src = url;
@@ -106,7 +107,6 @@ const renderImage = (url, likes, comments, description)=>{
   showLoadCommentsButton(totalCommentCount - STEP_COMMENTS_COUNT);
   updateCommentСounter(totalCommentCount);
 };
-
 
 const openImagePopup = () => {
   pictureElement.classList.remove('hidden');
