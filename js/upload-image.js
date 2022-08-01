@@ -1,8 +1,7 @@
 import {isEscapeKey} from './utils.js';
-import {onFillter, offFillter, removeFilterEffects} from './filters.js';
-import {showApprove, showError} from './message.js';
-import {isValid, isEditMode} from './validation.js';
-import {onZoomEffects, offZoomEffects, resetFotoSizeToDefault } from './zoom-foto-effects.js';
+import {addFillterEvents, removeFillterEvents, removeFilterEffects} from './filters.js';
+import {isValid, isEditMode, validate} from './validation.js';
+import {addZoomEffectEvents, removeZoomEffectEvents, resetFotoSizeToDefault } from './zoom-foto-effects.js';
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
@@ -17,17 +16,13 @@ const imgloadFormElement = document.querySelector('.img-upload__form');
 const hashtagsElement = imgloadFormElement.querySelector('.text__hashtags');
 const descriptionElement = imgloadFormElement.querySelector('.text__description');
 
+const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
+const newSuccessMessage = successTemplateElement.cloneNode(true);
+const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
+const newErrorMessage = errorTemplateElement.cloneNode(true);
 
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    if(isEditMode()){
-      return;
-    }
-    closeUploadImagePopup();
-  }
-};
-const openUploadImagePopup = (resetState = true) => {
+
+const onOpenUploadImagePopup = (resetState = true) => {
 
   if(resetState){
     const file = imageUploadInputElement.files[0];
@@ -44,18 +39,31 @@ const openUploadImagePopup = (resetState = true) => {
     resetFotoSizeToDefault();
   }
 
-  onFillter();
-  onZoomEffects();
+  validate();
+
+  addFillterEvents();
+  addZoomEffectEvents();
   downloadImagePopupElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  downloadImageCloseButtonElement.addEventListener('click', closeUploadImagePopup);
+  downloadImageCloseButtonElement.addEventListener('click', onCloseUploadImagePopup);
   document.addEventListener('keydown', onPopupEscKeydown);
 };
 
-function closeUploadImagePopup (resetState = true) {
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    if(isEditMode()){
+      return;
+    }
+    onCloseUploadImagePopup();
+  }
+};
+
+
+const onCloseUploadImagePopup= (resetState = true) => {
   downloadImagePopupElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  downloadImageCloseButtonElement.removeEventListener('click', closeUploadImagePopup);
+  downloadImageCloseButtonElement.removeEventListener('click', onCloseUploadImagePopup);
 
   if(resetState){
     noEffectElement.checked = true;
@@ -65,9 +73,31 @@ function closeUploadImagePopup (resetState = true) {
     removeFilterEffects();
   }
 
-  offFillter();
-  offZoomEffects();
-}
+  validate();
+
+  removeFillterEvents();
+  removeZoomEffectEvents();
+  document.removeEventListener('keydown', onPopupEscKeydown);
+};
+
+const showError = () => {
+  newErrorMessage.classList.add('error-message__upper-layer');
+  document.body.appendChild(newErrorMessage);
+  const errorButtonElement = document.querySelector('.error__button');
+  document.addEventListener('keydown', onErrorEscapeKyedown);
+  errorButtonElement.addEventListener('click', onCloseErrorPopup);
+
+  document.addEventListener('click', onCloseErrorPopup);
+};
+
+
+const showApprove = () =>  {
+  document.body.appendChild(newSuccessMessage);
+  const successButtonElement = document.querySelector('.success__button');
+  document.addEventListener('keydown', onSuccessEscapeKyedown);
+  successButtonElement.addEventListener('click', onCloseSuccessPopup);
+  document.addEventListener('click', onCloseSuccessPopup);
+};
 
 const uploadPicture = (body) => {
   fetch('https://26.javascript.pages.academy/kekstagram/',
@@ -75,16 +105,21 @@ const uploadPicture = (body) => {
       method: 'POST',
       body,
     },
-  ).then(() => {
-    closeUploadImagePopup();
-    showApprove();
+  ).then((response) => {
+    if (response.ok){
+      onCloseUploadImagePopup();
+      showApprove();
+    }else{
+      onCloseUploadImagePopup(false);
+      showError(()=>onOpenUploadImagePopup(false));
+    }
   }).catch(() => {
-    closeUploadImagePopup(false);
-    showError(()=>openUploadImagePopup(false));
+    onCloseUploadImagePopup(false);
+    showError(()=>onOpenUploadImagePopup(false));
   });
 };
 
-const submitUploadForm = (evt) => {
+const onSubmitUploadForm = (evt) => {
   evt.preventDefault();
 
   if (isValid()) {
@@ -92,9 +127,38 @@ const submitUploadForm = (evt) => {
   }
 };
 
-
-const onUploadImage = () =>{
-  imageUploadInputElement.addEventListener('change', openUploadImagePopup);
-  imgUpLoadFormElement.addEventListener('submit', submitUploadForm);
+const onCloseSuccessPopup = () => {
+  document.removeEventListener('keydown', onSuccessEscapeKyedown);
+  document.body.removeChild(newSuccessMessage);
+  document.removeEventListener('click', onCloseSuccessPopup);
 };
-export {onUploadImage};
+const onSuccessEscapeKyedown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onCloseSuccessPopup();
+  }
+};
+
+
+const onCloseErrorPopup = () => {
+  document.removeEventListener('keydown', onErrorEscapeKyedown);
+  document.body.removeChild(newErrorMessage);
+  document.removeEventListener('click', onCloseErrorPopup);
+  onOpenUploadImagePopup(false);
+};
+
+const onErrorEscapeKyedown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onCloseErrorPopup();
+    onOpenUploadImagePopup(false);
+  }
+};
+
+
+const addUploadImageEvents = () =>{
+  imageUploadInputElement.addEventListener('change', onOpenUploadImagePopup);
+  imgUpLoadFormElement.addEventListener('submit', onSubmitUploadForm);
+};
+
+export {addUploadImageEvents};

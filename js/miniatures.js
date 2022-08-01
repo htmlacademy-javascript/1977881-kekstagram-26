@@ -31,11 +31,7 @@ const renderPictures = (similarMiniatures) => {
   });
   picturesContainerElement.appendChild(picturesFragment);
 };
-
-const randomFilter = (pictures)=> Array.from({length: RANDOM_PICTURES_MAX_COUNT},()=> getRandomArrayElement(pictures,true));
-const discussedFilter = (pictures)=> pictures.sort(commentCompare);
-
-function commentCompare(a, b) {
+const compareComment = (a, b) => {
   if (a.comments.length< b.comments.length) {
     return 1;
   }
@@ -44,13 +40,17 @@ function commentCompare(a, b) {
   }
 
   return 0;
-}
+};
+
+const generateRandomPictures = (pictures) => Array.from({length: RANDOM_PICTURES_MAX_COUNT},()=> getRandomArrayElement(pictures,true));
+const filterDiscussedPictures = (pictures) => pictures.sort(compareComment);
+
 
 const showImgFilters = ()=>{
   imgFiltersElement.classList.remove('img-filters--inactive');
 };
 
-const resetFilter= (element, active)=>{
+const resetFilter = (element, active)=>{
   if(active){
     element.classList.add('img-filters__button--active');
   }else{
@@ -58,19 +58,19 @@ const resetFilter= (element, active)=>{
   }
 };
 
-const updateFilterStates =(byDefault,random, discussed)=>{
+const updateFilterStates = (byDefault, random, discussed)=>{
   resetFilter(btnFilterDefaultElement, byDefault);
   resetFilter(btnFilterRandomsElement, random);
   resetFilter(btnFilterDiscussedElement, discussed);
 };
 
-function debounce(func, timeout = DEBOUNCE_DELAY){
+const debounce =(func, timeout = DEBOUNCE_DELAY)=>{
   let timer;
   return (...args) => {
     clearTimeout(timer);
     timer = setTimeout(() => { func.apply(this, args); }, timeout);
   };
-}
+};
 
 const loadPictures = (filter)=>{
   fetch('https://26.javascript.pages.academy/kekstagram/data')
@@ -90,15 +90,15 @@ const loadPictures = (filter)=>{
     });
 };
 
-const onMiniatures=()=>{
+const addMiniatureEvents =()=>{
   btnFilterDefaultElement.addEventListener('click', ()=> updateFilterStates(true, false, false));
   btnFilterDefaultElement.addEventListener('click', debounce(() => loadPictures()));
 
   btnFilterRandomsElement.addEventListener('click', () => updateFilterStates(false, true, false));
-  btnFilterRandomsElement.addEventListener('click', debounce(() => loadPictures(randomFilter)));
+  btnFilterRandomsElement.addEventListener('click', debounce(() => loadPictures(generateRandomPictures)));
 
   btnFilterDiscussedElement.addEventListener('click', () => updateFilterStates(false, false, true));
-  btnFilterDiscussedElement.addEventListener('click', debounce(() => loadPictures(discussedFilter)));
+  btnFilterDiscussedElement.addEventListener('click', debounce(() => loadPictures(filterDiscussedPictures)));
 };
 
-export {loadPictures, onMiniatures};
+export {loadPictures, addMiniatureEvents};

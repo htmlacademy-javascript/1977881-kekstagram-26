@@ -9,19 +9,19 @@ const scaleControlValueElement = document.querySelector('.scale__control--value'
 const imgBackgroundElement = document.querySelector('.img-upload__preview');
 const imgUpLoadElement = imgBackgroundElement.querySelector('.img-upload__img');
 
-function setImageScale(){
+const setImageScale = ()=>{
   scaleControlValueElement.value = `${value}%`;
   imgUpLoadElement.style.transform = `scale(${value / MAX_VALUE})`;
-}
+};
 
-const rescaleMore = ()=>{
+const onRescaleMore = ()=>{
   if (value < MAX_VALUE) {
     value += STEP_VALUE;
   }
   setImageScale();
 };
 
-const imageReduction = () => {
+const onImageReduction = () => {
   if (value > MIN_VALUE) {
     value -= STEP_VALUE;
   }
@@ -33,14 +33,14 @@ const resetFotoSizeToDefault = () => {
   setImageScale();
 };
 
-const onZoomEffects = () => {
-  scaleControlSmallerElement.addEventListener('click', imageReduction);
-  scaleControlBiggerElement.addEventListener('click', rescaleMore);
+const addZoomEffectEvents = () => {
+  scaleControlSmallerElement.addEventListener('click', onImageReduction);
+  scaleControlBiggerElement.addEventListener('click', onRescaleMore);
 };
 
-const offZoomEffects = () => {
-  scaleControlSmallerElement.removeEventListener('click', imageReduction);
-  scaleControlBiggerElement.removeEventListener('click', rescaleMore);
+const removeZoomEffectEvents = () => {
+  scaleControlSmallerElement.removeEventListener('click', onImageReduction);
+  scaleControlBiggerElement.removeEventListener('click', onRescaleMore);
 };
 
-export {onZoomEffects, offZoomEffects, resetFotoSizeToDefault};
+export {addZoomEffectEvents, removeZoomEffectEvents, resetFotoSizeToDefault};

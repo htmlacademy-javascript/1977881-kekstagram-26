@@ -89,6 +89,11 @@ const removeFilterEffects = () => {
   sliderContainerElement.classList.add('hidden');
 };
 
+const onResetEffect = () => {
+  removeFilterEffects();
+};
+
+
 const updateSlider = (minValue, maxValue, step) => {
   sliderElement.noUiSlider.updateOptions({
     range: {
@@ -100,14 +105,14 @@ const updateSlider = (minValue, maxValue, step) => {
   });
 };
 
-const changeCromeEffect = () => {
+const onChangeCromeEffect = () => {
   imageElement.classList.add('effects__preview--chrome');
   sliderContainerElement.classList.remove('hidden');
 
   updateSlider(CROME_MIN_VALUE, CROME_MAX_VALUE, CROME_STEP);
 };
 
-const changeSepiaEffect = () => {
+const onChangeSepiaEffect = () => {
   imageElement.classList = '';
   imageElement.classList.add('effects__preview--sepia');
   sliderContainerElement.classList.remove('hidden');
@@ -115,7 +120,7 @@ const changeSepiaEffect = () => {
   updateSlider(SEPIA_MIN_VALUE, SEPIA_MAX_VALUE, SEPIA_STEP);
 };
 
-const changeMarvinEffect = () => {
+const onChangeMarvinEffect = () => {
   imageElement.classList = '';
   imageElement.classList.add('effects__preview--marvin');
   sliderContainerElement.classList.remove('hidden');
@@ -123,7 +128,7 @@ const changeMarvinEffect = () => {
   updateSlider(MARVIN_MIN_VALUE, MARVIN_MAX_VALUE, MARVIN_STEP);
 };
 
-const changePhobosEffect = () => {
+const onChangePhobosEffect = () => {
   imageElement.classList = '';
   imageElement.classList.add('effects__preview--phobos');
   sliderContainerElement.classList.remove('hidden');
@@ -131,7 +136,7 @@ const changePhobosEffect = () => {
   updateSlider(PHOBOS_MIN_VALUE, PHOBOS_MAX_VALUE, PHOBOS_STEP);
 };
 
-const changeHeatEffect = () => {
+const onChangeHeatEffect = () => {
   imageElement.classList = '';
   imageElement.classList.add('effects__preview--heat');
   sliderContainerElement.classList.remove('hidden');
@@ -139,22 +144,22 @@ const changeHeatEffect = () => {
   updateSlider(HEAT_MIN_VALUE, HEAT_MAX_VALUE, HEAT_STEP);
 };
 
-const onFillter = () => {
-  noEffectElement.addEventListener('click', removeFilterEffects);
-  cromeEffectElement.addEventListener('click', changeCromeEffect);
-  sepiaEffectElement.addEventListener('click', changeSepiaEffect);
-  marvinEffectElement.addEventListener('click', changeMarvinEffect);
-  phobosEffectElement.addEventListener('click', changePhobosEffect);
-  heatEffectElement.addEventListener('click', changeHeatEffect);
+const addFillterEvents = () => {
+  noEffectElement.addEventListener('click', onResetEffect);
+  cromeEffectElement.addEventListener('click', onChangeCromeEffect);
+  sepiaEffectElement.addEventListener('click', onChangeSepiaEffect);
+  marvinEffectElement.addEventListener('click', onChangeMarvinEffect);
+  phobosEffectElement.addEventListener('click', onChangePhobosEffect);
+  heatEffectElement.addEventListener('click', onChangeHeatEffect);
 };
 
-const offFillter = () => {
-  noEffectElement.removeEventListener('click', removeFilterEffects);
-  cromeEffectElement.removeEventListener('click', changeCromeEffect);
-  sepiaEffectElement.removeEventListener('click', changeSepiaEffect);
-  marvinEffectElement.removeEventListener('click', changeMarvinEffect);
-  phobosEffectElement.removeEventListener('click', changePhobosEffect);
-  heatEffectElement.removeEventListener('click', changeHeatEffect);
+const removeFillterEvents = () => {
+  noEffectElement.removeEventListener('click', onResetEffect);
+  cromeEffectElement.removeEventListener('click', onChangeCromeEffect);
+  sepiaEffectElement.removeEventListener('click', onChangeSepiaEffect);
+  marvinEffectElement.removeEventListener('click', onChangeMarvinEffect);
+  phobosEffectElement.removeEventListener('click', onChangePhobosEffect);
+  heatEffectElement.removeEventListener('click', onChangeHeatEffect);
 };
 
-export {onFillter, offFillter, addSliderUpdater, initSlider, removeFilterEffects};
+export {addFillterEvents, removeFillterEvents, addSliderUpdater, initSlider, removeFilterEffects};
